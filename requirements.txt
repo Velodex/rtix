@@ -1,0 +1,9 @@
+grpcio>=1.70.0
+grpcio-tools>=1.70.0
+pynng>=0.7.1
+pyyaml>=6.0.2
+pytest>=7.2.0
+coverage>=7.1.0
+setuptools>=67.2.0
+wheel>=0.38.4
+twine>=4.0.2
