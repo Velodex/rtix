@@ -1,0 +1,23 @@
+services:
+  py_sub:
+    image: rtix-dev:latest
+    privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /rtix/examples/python_pub_sub/py_sub
+    volumes:
+      - ../..:/rtix
+      - /tmp:/tmp
+    ipc: host
+    command: python3 run_py_sub.py
+  py_pub:
+    image: rtix-dev:latest
+    privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /rtix/examples/python_pub_sub/py_pub
+    volumes:
+      - ../..:/rtix
+      - /tmp:/tmp
+    ipc: host
+    command: python3 run_py_pub.py
