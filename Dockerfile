@@ -8,6 +8,7 @@ RUN apt-get update && \
     build-essential \
     software-properties-common \ 
     python3-pip \
+    python3.8-venv \
     git \
     && rm -rf /var/lib/apt/lists/*
 

@@ -99,7 +99,7 @@ cmake ..
 make -j
 make test
 ```
-6. If you wish to generate a coverage report, rebuild using the `TEST_COVERAGE=ON`.  Note that this turns off optimizations, so to use in an application, you'll want to delete the `build` folder and rebuild without the coverage flag on.
+6. If you wish to generate a coverage report, regenerate and build using `-DTEST_COVERAGE=ON`.  Note that this turns off optimizations, so to use in an application, you'll want to delete the `build` folder and rebuild without the coverage flag on.
 ```bash
 cmake -DTEST_COVERAGE=ON ..
 make -j && make test
