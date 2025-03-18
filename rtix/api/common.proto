@@ -1,0 +1,23 @@
+// Copyright (c) 2025 Velodex Robotics, Inc and RTIX Developers.
+// Licensed under Apache-2.0. http://www.apache.org/licenses/LICENSE-2.0
+
+syntax = "proto3";
+
+package rtix.api.common;
+
+import "google/protobuf/any.proto";
+
+/// Metadata is associated with any generic message.
+message Metadata {
+  /// Epoch/Unix timestamp measured from Jan 1, 1970.  Note that the clock used
+  /// for this timestamp receives periodic correction which may result in small
+  /// discontinuities when using high data rates.
+  uint64 timestamp_ns = 1;
+}
+
+/// Any message written to IPC will be written to a generic packet so that
+/// common metadata such as timestamps are always available
+message Packet {
+  Metadata metadata = 1;
+  google.protobuf.Any payload = 2;
+}

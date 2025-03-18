@@ -1,0 +1,39 @@
+# gitignore
+
+# mac
+*.DS_Store
+
+# python
+.pytest_cache
+__pycache__
+*.pyc
+*.egg-info
+
+# folders
+venv
+build
+bin
+lib
+obj
+dep
+dist
+public
+.vscode
+
+# coverage
+.coverage
+coverage.xml
+coverage
+
+# objects
+*.a
+*.so
+
+# Generated protobuf
+*_pb2_grpc.py
+*_pb2.py
+*.pb.cc
+*.pb.h
+
+# Log files
+*.log
