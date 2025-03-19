@@ -1,23 +1,23 @@
 services:
-  py_sub:
+  node_a:
     image: rtix-dev
     privileged: true
     environment:
       - PYTHONUNBUFFERED=1
-    working_dir: /rtix/examples/python_pub_sub/py_sub
+    working_dir: /rtix/examples/python_ping_pong/node_a
     volumes:
       - ../..:/rtix
       - /tmp:/tmp
     ipc: host
-    command: python3 run_py_sub.py
-  py_pub:
+    command: python3 run_node_a.py
+  node_b:
     image: rtix-dev
     privileged: true
     environment:
       - PYTHONUNBUFFERED=1
-    working_dir: /rtix/examples/python_pub_sub/py_pub
+    working_dir: /rtix/examples/python_ping_pong/node_b
     volumes:
       - ../..:/rtix
       - /tmp:/tmp
     ipc: host
-    command: python3 run_py_pub.py
+    command: python3 run_node_b.py

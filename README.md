@@ -16,6 +16,28 @@ Our core design principles with RTIX are:
 - **Simple**: Our lightweight design makes installation, utilization, and versioning straightforward.  This improves maintainability.
 
 ## Basic Usage
+
+The data plane configuration is specified in a `channel-map.yaml` file.
+
+```yaml
+# A channel is a shared memory pipeline that contains data for a specific
+# message type.  A node is an object that can publish (write) or subscribe
+# (read) to a set of channels.  Only one node that publish to a channel, but
+# many nodes can subscribe to a channel.
+node_a:
+  publishers:
+    - channel_id: ping
+  subscribers:
+    - channel_id: pong
+      timeout_ms: 1000
+node_b:
+  publishers:
+    - channel_id: pong
+  subscribers:
+    - channel_id: ping
+      timeout_ms: 1000
+```
+
 The following shows basic usage in Python.  C++ follows a similar pattern.
 
 ```python
@@ -23,14 +45,14 @@ import yaml
 from rtix.ipc.node import Node
 from rtix.ipc.channel_map import ChannelMap
 
-# Initialize the channel map.  This is where the connections are managed.
+# Initialize the channel map from yaml.  This is where connections are managed.
 with open("channel-map.yaml") as file:
     yaml_dict = yaml.safe_load(file)
     channel_map = ChannelMap.LoadYaml(yaml_dict)
 
 # A node contains multiple publishers and subscribers.  It is typically used as
 # the IPC manager for a single process.
-node = Node(config=channel_map.nodes["my_node"])
+node = Node(config=channel_map.nodes["node_a"])
 
 # Messages are Protobuf types.  You can use built-in Protobuf messages or
 # create your own.  This is a placeholder for a real message type.
@@ -38,16 +60,16 @@ my_message = Message()
 
 # The publisher send command is sync/blocking.  Returns true if
 # the message was sent to the shared memory successfully.
-node.publisher("my_message").send(my_message)
+node.publisher("ping").send(my_message)
 
 # The subscriber recv command is by default sync/blocking for the
 # length of the timeout.  If block=False then it will return
 # immediately.  Returns true if data was pulled from the shared
 # memory, false if not.
-node.subscriber("my_message").recv(my_message, block=True)
+node.subscriber("pong").recv(my_message, block=True)
 ```
 
-The snippet above is for reference only.  In practice, messages will be published and received in different processes or threads.  For real examples, see below.
+The snippet above is for reference only as it only shows one of the nodes (`node_a`).  In practice, messages will be published and received in different processes or threads.  For real examples, see below.
 
 
 ## Installation
@@ -114,7 +136,8 @@ make coverage-html
 TODO
 
 ## Examples
-1. [Simple Python Publish and Subscriber](./examples/python_pub_sub/README.md)
+1. [Python Simple Publish and Subscribe](./examples/python_pub_sub/README.md)
+2. [Python Ping Pong with 2 Nodes](./examples/python_ping_pong/README.md)
 
 ## License
 Licensed permissively under Apache-2.0.

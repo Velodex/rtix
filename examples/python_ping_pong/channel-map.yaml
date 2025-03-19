@@ -12,10 +12,13 @@
 #       timeout_ms: <timeout_value>
 node_a:
   publishers:
-    - channel_id: node_a_int
-  subscribers: []
-node_b:
-  publishers: []
+    - channel_id: ping
   subscribers:
-    - channel_id: node_a_int
-      timeout_ms: 3000
+    - channel_id: pong
+      timeout_ms: 1000
+node_b:
+  publishers:
+    - channel_id: pong
+  subscribers:
+    - channel_id: ping
+      timeout_ms: 1000
