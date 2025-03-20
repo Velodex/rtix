@@ -143,4 +143,4 @@ TODO
 Licensed permissively under Apache-2.0.
 
 ## Contributing
-TODO
+See the [Contributing Guide](./CONTRIBUTING.md)
