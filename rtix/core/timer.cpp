@@ -21,14 +21,14 @@ void Timer::start() {
   _tic = std::chrono::steady_clock::now();
 }
 
-double Timer::getElapsedS() {
+double Timer::getElapsedS() const {
   auto toc = std::chrono::steady_clock::now();
   double et_us =
       std::chrono::duration_cast<std::chrono::microseconds>(toc - _tic).count();
   return et_us / US_PER_S;
 }
 
-unsigned Timer::getElapsedNs() {
+unsigned Timer::getElapsedNs() const {
   auto toc = std::chrono::steady_clock::now();
   return std::chrono::duration_cast<std::chrono::nanoseconds>(toc - _tic)
       .count();

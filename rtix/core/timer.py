@@ -17,6 +17,9 @@ class Timer:
     to spinlock the thread because Python processes should not be expected to
     perform with this level of precision.  If such precision is needed, use C++
     """
+    MS_PER_S = 1e3
+    US_PER_S = 1e6
+    NS_PER_S = 1e9
 
     def __init__(self):
         self.start()

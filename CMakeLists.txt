@@ -78,6 +78,11 @@ find_package(GTest REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR})
 
 # ------------------------------------------------------------------------------
+# This is needed to be able to display compile-time debug logs
+# ------------------------------------------------------------------------------
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
+
+# ------------------------------------------------------------------------------
 # Add the library targets
 # ------------------------------------------------------------------------------
 add_subdirectory(rtix)

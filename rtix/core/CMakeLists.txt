@@ -13,6 +13,7 @@ include_directories(
 )
 
 add_library(${target_name} SHARED
+  logging.cpp
   timer.cpp
 )
 
@@ -41,6 +42,7 @@ set(test_name "rtix-${module_name}-test")
 
 add_executable(${test_name} 
   tests/test_format.cpp
+  tests/test_logging.cpp
   tests/test_timer.cpp
 )
 

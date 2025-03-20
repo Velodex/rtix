@@ -21,8 +21,8 @@ class Timer {
   Timer();
   virtual ~Timer() = default;
   void start();
-  double getElapsedS();
-  unsigned getElapsedNs();
+  double getElapsedS() const;
+  unsigned getElapsedNs() const;
   static void Sleep(double duration_s);
   static void Spinlock(double duration_s);
 

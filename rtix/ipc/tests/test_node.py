@@ -74,7 +74,3 @@ def test_node():
 
     node_a_thread.join()
     node_b_thread.join()
-
-
-if __name__ == "__main__":
-    test_node()
