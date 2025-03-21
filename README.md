@@ -15,6 +15,13 @@ Our core design principles with RTIX are:
 - **Low latency IPC**: We use shared memory to make communication as fast as possible and mitigate the non-determinism that presents in networking based approaches.
 - **Simple**: Our lightweight design makes installation, utilization, and versioning straightforward.  This improves maintainability.
 
+## Architecture
+
+RTIX provides an architecture for running multiple processes (e.g. perception, planning, and control) on a Robot PC.  Processes can be written in C++ and Python.  They share critical data with each other through a fast shared memory IPC.  They respond to actions/report status to/from an orchestrator.  Because all messages are Protobuf types, the orchestrator can provide a client service using gRPC and share the native data directly with the client as requested.  This streamlines a high-performance multi-process robot controller service running on a single PC.
+
+![image](./diagram.png)
+
+
 ## Basic Usage
 
 The data plane configuration is specified in a `channel-map.yaml` file.
