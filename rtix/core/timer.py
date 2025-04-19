@@ -9,6 +9,11 @@ def getTimestampNs():
     return time.time_ns()
 
 
+def nsToMs(time_ns: int) -> int:
+    """Convert nanoseconds to milliseconds"""
+    return int(time_ns * 1e-6)
+
+
 class Timer:
     """
     A timer to keep track of elapsed time and sleep the thread.

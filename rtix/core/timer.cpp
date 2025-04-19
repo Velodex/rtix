@@ -13,6 +13,10 @@ uint64_t getTimestampNs() {
       .count();
 }
 
+uint64_t nsToMs(uint64_t time_ns) {
+  return static_cast<uint64_t>(time_ns * 1e-6);
+}
+
 Timer::Timer() {
   _tic = std::chrono::steady_clock::now();
 }

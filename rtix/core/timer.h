@@ -11,6 +11,9 @@ namespace core {
 /// Returns the current time since epoch (ns)
 uint64_t getTimestampNs();
 
+/// Convert nanoseconds to milliseconds
+uint64_t nsToMs(uint64_t time_ns);
+
 /// A timer to keep track of elapsed time and sleep/spinlock the thread
 class Timer {
  public:
