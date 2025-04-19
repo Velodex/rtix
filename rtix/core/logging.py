@@ -4,23 +4,28 @@
 import sys
 import logging
 
+SIMPLE_LOG_FMT = "[%(asctime)s] [%(levelname)s] %(message)s"
+DETAILED_LOG_FMT = "[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s"
 
-def setupDefaultLogging(log_file: str, level: int = logging.INFO):
+
+def setupDefaultLogging(
+    log_file: str,
+    console_level: int = logging.INFO,
+    detailed_level: int = logging.DEBUG,
+    log_format: str = DETAILED_LOG_FMT,
+):
     """Initializes a default logger, writing to stdout and file"""
-    DETAILED_LOG_FMT = "[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s"
-    DETAILED_LOG_LEVEL = logging.DEBUG
-
     logger = logging.getLogger()
-    logger.setLevel(DETAILED_LOG_LEVEL)
+    logger.setLevel(detailed_level)
 
-    formatter = logging.Formatter(DETAILED_LOG_FMT)
+    formatter = logging.Formatter(log_format)
 
     stream_handler = logging.StreamHandler(sys.stdout)
-    stream_handler.setLevel(level)
+    stream_handler.setLevel(console_level)
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
     file_handler = logging.FileHandler(log_file)
-    file_handler.setLevel(DETAILED_LOG_LEVEL)
+    file_handler.setLevel(detailed_level)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

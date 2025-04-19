@@ -9,23 +9,22 @@ namespace rtix {
 namespace core {
 
 void setupDefaultLogging(const std::string& log_file,
-                         spdlog::level::level_enum level) {
-  const std::string LOG_FMT = "[%Y-%m-%d %H:%M:%S,%e] [%s:%#] [%l] %v";
-  spdlog::level::level_enum LOG_LEVEL = spdlog::level::debug;
-
+                         spdlog::level::level_enum console_level,
+                         spdlog::level::level_enum detailed_level,
+                         const std::string& log_format) {
   auto console_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
-  console_sink->set_pattern(LOG_FMT);
-  console_sink->set_level(level);
+  console_sink->set_pattern(log_format);
+  console_sink->set_level(console_level);
 
   auto file_sink =
       std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_file, true);
-  file_sink->set_pattern(LOG_FMT);
-  file_sink->set_level(LOG_LEVEL);
+  file_sink->set_pattern(log_format);
+  file_sink->set_level(detailed_level);
 
   spdlog::logger logger("multi_sink", {console_sink, file_sink});
-  logger.set_level(LOG_LEVEL);
+  logger.set_level(detailed_level);
   spdlog::set_default_logger(std::make_shared<spdlog::logger>(logger));
-  spdlog::set_pattern(LOG_FMT);
+  spdlog::set_pattern(log_format);
 }
 
 }  // namespace core
