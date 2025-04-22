@@ -23,7 +23,7 @@ def RTIX_THROW_IF_NOT(evaluation: bool, module: str, msg: str):
 
 
 def getFullTraceback() -> str:
-    """Return the detailed full traceback in the event of an exception"""
+    """Returns the detailed full traceback in the event of an exception"""
     exc_type, exc_value, exc_traceback = sys.exc_info()
 
     # Format the traceback

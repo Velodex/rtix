@@ -86,6 +86,7 @@ class Process:
                 else:
                     Timer.Sleep(self._config.monitor_rate_s)
             except Exception as e:
+                logging.error(getFullTraceback())
                 self.publishStatus(code=common_pb2.FAILURE,
                                    msg="Exception {}".format(e))
                 self._running = False
