@@ -21,7 +21,15 @@ RUN apt-get update && \
     libspdlog-dev \
     libyaml-cpp-dev \
     protobuf-compiler \
+    libzstd-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Cpptrace is installed from source
+RUN git clone --branch v0.8.3 --depth 1 https://github.com/jeremy-rifkin/cpptrace.git && \
+    mkdir cpptrace/build && cd cpptrace/build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make -j && \
+    make install
 
 # Additional build and test dependencies
 RUN apt-get update && \

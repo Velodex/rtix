@@ -12,6 +12,7 @@ Our core design principles with RTIX are:
   - Protobuf is the industry standard for message serialization and deserialization.
   - YAML is used for configuration of the data plane.
   - Spdlog is used for C++ logging.
+  - Cpptrace is used for C++ backtrace.
 - **Low latency IPC**: We use shared memory to make communication as fast as possible and mitigate the non-determinism that presents in networking based approaches.
 - **Simple**: Our lightweight design makes installation, utilization, and versioning straightforward.  This improves maintainability.
 

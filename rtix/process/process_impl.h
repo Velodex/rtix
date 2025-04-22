@@ -41,6 +41,7 @@ void Process<ActionT>::run() {
         Timer::Sleep(_config.monitor_rate_s);
       }
     } catch (const std::exception& e) {
+      SPDLOG_ERROR(core::getFullTraceback());
       publishStatus(FAILURE, RTIX_FMT("Exception " << e.what()));
       _running = false;
     } catch (...) {

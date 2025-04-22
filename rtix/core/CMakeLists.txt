@@ -13,6 +13,7 @@ include_directories(
 )
 
 add_library(${target_name} SHARED
+  exception.cpp
   logging.cpp
   timer.cpp
 )
@@ -21,9 +22,9 @@ add_library(${target_name} SHARED
 #   # No dependencies
 # )
 
-# target_link_libraries(${target_name} PRIVATE
-#   # Nothing to link
-# )
+target_link_libraries(${target_name} PRIVATE
+  cpptrace::cpptrace
+)
 
 set_target_properties(${target_name} PROPERTIES
   LINKER_LANGUAGE CXX
@@ -41,6 +42,7 @@ set_target_properties(${target_name} PROPERTIES
 set(test_name "rtix-${module_name}-test")
 
 add_executable(${test_name} 
+  tests/test_exception.cpp
   tests/test_format.cpp
   tests/test_logging.cpp
   tests/test_timer.cpp

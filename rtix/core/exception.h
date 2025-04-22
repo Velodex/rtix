@@ -24,5 +24,8 @@ namespace core {
 #define RTIX_THROW_IF_NOT(evaluation, module, msg) \
   RTIX_THROW_IF(!(evaluation), module, msg)
 
+/// Returns the detailed full traceback in the event of an exception
+std::string getFullTraceback();
+
 }  // namespace core
 }  // namespace rtix

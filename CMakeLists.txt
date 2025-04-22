@@ -71,6 +71,7 @@ include(FindProtobuf)
 find_package(nng CONFIG REQUIRED)
 find_package(yaml-cpp 0.6.2 REQUIRED)
 find_package(spdlog 1.5.0 CONFIG REQUIRED)
+find_package(cpptrace 0.8.3 REQUIRED)
 find_package(Protobuf 3.6.1 REQUIRED)
 find_package(GTest REQUIRED)
 
