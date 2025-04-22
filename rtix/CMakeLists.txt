@@ -4,3 +4,4 @@
 add_subdirectory(api)
 add_subdirectory(core)
 add_subdirectory(ipc)
+add_subdirectory(process)

@@ -1,0 +1,30 @@
+# A channel is a shared memory pipeline that contains data for a specific
+# message type.  A node is an object that can publish (write) or subscribe
+# (read) to a set of channels.  Only one node that publish to a channel, but
+# many nodes can subscribe to a channel.
+#
+# The archtype for a node is:
+# <node_id>:
+#   publishers:
+#     - channel_id: <channel_id>
+#   subscribers:
+#     - channel_id: <channel_id>
+#       timeout_ms: <timeout_value>
+test_node:
+  subscribers:
+    - channel_id: action
+      timeout_ms: 1000
+    - channel_id: x
+      timeout_ms: 1000
+  publishers:
+    - channel_id: status
+    - channel_id: y
+fixture_node:
+  subscribers:
+    - channel_id: status
+      timeout_ms: 1000
+    - channel_id: y
+      timeout_ms: 1000
+  publishers:
+    - channel_id: action
+    - channel_id: x

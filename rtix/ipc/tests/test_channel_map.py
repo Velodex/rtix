@@ -5,9 +5,10 @@ import yaml
 
 from rtix.ipc.channel_map import ChannelMap
 
+IPC_TEST_YAML_FILE = "/rtix/rtix/ipc/tests/channel-map.yaml"
 
-def load_test_channel_map() -> ChannelMap:
-    yaml_file = "/rtix/rtix/ipc/tests/channel-map.yaml"
+
+def load_test_channel_map(yaml_file: str = IPC_TEST_YAML_FILE) -> ChannelMap:
     with open(yaml_file) as stream:
         yaml_dict = yaml.safe_load(stream)
         return ChannelMap.LoadYaml(yaml_dict=yaml_dict)

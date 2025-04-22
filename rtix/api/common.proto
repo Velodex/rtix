@@ -21,3 +21,17 @@ message Packet {
   Metadata metadata = 1;
   google.protobuf.Any payload = 2;
 }
+
+/// This code represents the outcome of an operation.
+enum Code {
+  RUNNING = 0;
+  SUCCESS = 1;
+  FAILURE = 2;
+}
+
+/// This message includes the code and a string detailing the outcome.  If the
+/// outcome is failure, the detail message will identify the failure mechanism.
+message Status {
+  Code code = 1;
+  string message = 2;
+}
