@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#setup-args
 setup(
     name="rtix",
-    version="0.9.0",
+    version="0.9.1",
     author="Velodex Robotics, Inc and RTIX Developers",
     description=
     "Fast and lightweight IPC and orchestration layer for robotics and embodied AI applications.",
