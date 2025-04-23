@@ -39,7 +39,15 @@ class TestProcess : public Process<BoolValue> {
   }
   virtual ~TestProcess() = default;
 
-  void processInputs() override {
+  void handleAction(const BoolValue& action) override {
+    // Need to sleep to give the fixture node time to receive
+    Timer::Sleep(0.2);
+    publishStatus(Code::SUCCESS, "Handled");
+    setRunning(true);
+    SPDLOG_INFO("Handled action");
+  }
+
+  void stepOuter() override {
     if (receiveInput("in", input)) {
       SPDLOG_INFO("Received input");
     }
@@ -49,15 +57,7 @@ class TestProcess : public Process<BoolValue> {
     }
   }
 
-  void handleAction(const BoolValue& action) override {
-    // Need to sleep to give the fixture node time to receive
-    Timer::Sleep(0.2);
-    publishStatus(Code::SUCCESS, "Handled");
-    _running = true;
-    SPDLOG_INFO("Handled action");
-  }
-
-  void step() override {
+  void stepInner() override {
     publishOutput("out", input);
     SPDLOG_INFO(RTIX_FMT("Published output " << input.value()));
   }

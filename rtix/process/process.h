@@ -60,11 +60,20 @@ class Process {
   void stop();
 
  protected:
-  /// These functions are implemented in the derived class
-  virtual void processInputs() = 0;
+  /// Implement: This function is called after a new action is received.
   virtual void handleAction(const ActionT& action) = 0;
-  virtual void step() = 0;
 
+  /// Implement: This function is called each iteration at the monitor_rate_s
+  /// (if not running) or the loop_rate_s (if running).  This is where input
+  /// information should be handled.
+  virtual void stepOuter() = 0;
+
+  /// Implement: This function is called each iteration at the loop_rate_s (if
+  /// running), and is not called if not running.  This is where runtime
+  /// computation should be handled.
+  virtual void stepInner() = 0;
+
+  void setRunning(bool running);
   double getProcessTimeS() const;
   void publishStatus(const Code& code, const std::string& msg) const;
   void publishOutput(const std::string& key, const Message& msg) const;
@@ -74,10 +83,10 @@ class Process {
  protected:
   const Node& _node;
   const ProcessConfig _config{};
-  bool _running{false};
 
  private:
-  bool _alive{true};
+  bool _running{false};
+  bool _alive{false};
   Timer _timer{};
   ActionT _action{};
   bool _hasNewAction();

@@ -57,7 +57,7 @@ class Process:
         self._config = config
         self._action = action
         self._running = False
-        self._alive = True
+        self._alive = False
         self._timer = Timer()
 
     def run(self):
@@ -70,7 +70,7 @@ class Process:
 
                 # Process the inputs at the very beginning of the loop so that any
                 # new actions can compute on the latest input information.
-                self.processInputs()
+                self.stepOuter()
 
                 # If available, handle a new action and reset the loop timer to
                 # avoid counting the action processing time as an overrun.
@@ -81,7 +81,7 @@ class Process:
                 # Run the step function and try to match the target process rate if
                 # running, otherwise wait for a new action.
                 if self._running:
-                    self.step()
+                    self.stepInner()
                     self._matchTargetLoopRate(loop_timer.getElapsedS())
                 else:
                     Timer.Sleep(self._config.monitor_rate_s)
@@ -95,17 +95,31 @@ class Process:
         """Ends the main loop"""
         self._alive = False
 
-    def processInputs(self):
-        """This method needs to be implemented"""
-        raise NotImplementedError
-
     def handleAction(self, action: Message):
-        """This method needs to be implemented"""
+        """
+        Implement: This function is called after a new action is received.
+        """
         raise NotImplementedError
 
-    def step(self):
-        """This method needs to be implemented"""
+    def stepOuter(self):
+        """
+        Implement: This function is called each iteration at the monitor_rate_s
+        (if not running) or the loop_rate_s (if running).  This is where input
+        information should be handled.
+        """
         raise NotImplementedError
+
+    def stepInner(self):
+        """
+        Implement: This function is called each iteration at the loop_rate_s (if
+        running), and is not called if not running.  This is where runtime
+        computation should be handled.
+        """
+        raise NotImplementedError
+
+    def setRunning(self, running: bool):
+        """Sets if the inner loop is running"""
+        self._running = running
 
     def getProcessTimeS(self) -> float:
         """Returns the process time since the call of start()"""

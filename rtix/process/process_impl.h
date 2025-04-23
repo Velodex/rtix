@@ -23,7 +23,7 @@ void Process<ActionT>::run() {
 
       // Process the inputs at the very beginning of the loop so that any new
       // actions can compute on the latest input information.
-      processInputs();
+      stepOuter();
 
       // If available, handle a new action and reset the loop timer to avoid
       // counting the action processing time as an overrun.
@@ -35,7 +35,7 @@ void Process<ActionT>::run() {
       // Run the step function and try to match the target process rate if
       // running, otherwise wait for a new action.
       if (_running) {
-        step();
+        stepInner();
         _matchTargetLoopRate(loop_timer.getElapsedS());
       } else {
         Timer::Sleep(_config.monitor_rate_s);
@@ -54,6 +54,11 @@ void Process<ActionT>::run() {
 template <typename ActionT>
 void Process<ActionT>::stop() {
   _alive = false;
+}
+
+template <typename ActionT>
+void Process<ActionT>::setRunning(bool running) {
+  _running = running;
 }
 
 template <typename ActionT>

@@ -26,21 +26,21 @@ class TestProcess(Process):
         self.input = Int64Value()
         logging.info("Created test process")
 
-    def processInputs(self):
+    def handleAction(self, action: BoolValue):
+        # Need to sleep to give the fixture node time to receive
+        time.sleep(0.2)
+        self.publishStatus(code=common_pb2.Code.SUCCESS, msg="Handled")
+        self.setRunning(True)
+        logging.info("Handled action")
+
+    def stepOuter(self):
         if self.receiveInput(key="in", msg=self.input):
             logging.info("Received input")
 
         if self.getProcessTimeS() > MAX_PROCESS_TIME_S:
             self.stop()
 
-    def handleAction(self, action: BoolValue):
-        # Need to sleep to give the fixture node time to receive
-        time.sleep(0.2)
-        self.publishStatus(code=common_pb2.Code.SUCCESS, msg="Handled")
-        self._running = True
-        logging.info("Handled action")
-
-    def step(self):
+    def stepInner(self):
         if self.input is not None:
             self.publishOutput(key="out", msg=self.input)
             logging.info(f"Published output {self.input.value}")
