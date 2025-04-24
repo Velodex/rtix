@@ -58,6 +58,9 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 # ------------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+include(CMakePackageConfigHelpers)  # To build cmake configs
+include(GNUInstallDirs)  # For find_package(rtix) to work
+
 if(TEST_COVERAGE)
   include(CodeCoverage)
   APPEND_COVERAGE_COMPILER_FLAGS()
