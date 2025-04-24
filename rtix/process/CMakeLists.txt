@@ -6,7 +6,20 @@ set(module_name "process")
 # ------------------------------------------------------------------------------
 # Example target
 # ------------------------------------------------------------------------------
-# NONE: Header only
+set(target_name "rtix-${module_name}")
+
+# Header only
+add_library(${target_name} INTERFACE)
+
+file(GLOB_RECURSE MODULE_HEADERS "*.h")
+
+set_target_properties(${target_name} PROPERTIES
+  PUBLIC_HEADER "${MODULE_HEADERS}"
+)
+
+install(TARGETS ${target_name}
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/rtix/${module_name}"
+)
 
 # ------------------------------------------------------------------------------
 # Test target

@@ -1,6 +1,8 @@
 # Copyright (c) 2025 Velodex Robotics, Inc and RTIX Developers.
 # Licensed under Apache-2.0. http://www.apache.org/licenses/LICENSE-2.0
 
+set(module_name "api")
+
 # ------------------------------------------------------------------------------
 # Run the protobuf compilers
 # ------------------------------------------------------------------------------
@@ -33,7 +35,7 @@ endforeach()
 # Library target
 # ------------------------------------------------------------------------------
 
-set(target_name "rtix-api")
+set(target_name "rtix-${module_name}")
 
 include_directories(
   "${PROJECT_SOURCE_DIR}"
@@ -48,6 +50,8 @@ target_link_libraries(${target_name} PRIVATE
   ${PROTOBUF_LIBRARY}
 )
 
+file(GLOB_RECURSE MODULE_HEADERS "*.h")
+
 set_target_properties(${target_name} PROPERTIES
   LINKER_LANGUAGE CXX
   CXX_STANDARD 17
@@ -56,4 +60,9 @@ set_target_properties(${target_name} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib
   ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
+  PUBLIC_HEADER "${MODULE_HEADERS}"
+)
+
+install(TARGETS ${target_name}
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/rtix/${module_name}"
 )
