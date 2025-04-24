@@ -64,5 +64,5 @@ set_target_properties(${target_name} PROPERTIES
 )
 
 install(TARGETS ${target_name}
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/rtix/${module_name}"
+  PUBLIC_HEADER DESTINATION "rtix/${module_name}"
 )
