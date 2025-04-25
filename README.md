@@ -121,15 +121,23 @@ docker build -f Dockerfile -t rtix-dev .
 ```bash
 docker run --rm -it -v .:/rtix rtix-dev
 ```
-5. In the container, setup a CMake project, build and test.  Protobuf files are generated during the CMake configuration step.
+5. In the container, setup a CMake project, build, install and test.  Protobuf files are generated during the CMake configuration step.
 ```bash
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make -j
+make install
 make test
 ```
-6. If you wish to generate a coverage report, regenerate and build using `-DTEST_COVERAGE=ON`.  Note that this turns off optimizations, so to use in an application, you'll want to delete the `build` folder and rebuild without the coverage flag on.
+6. To import the C++ package into another project, add to your CMakeLists.txt
+```bash
+find_package(rtix CONFIG REQUIRED)
+include_directories(${RTIX_INCLUDE_DIRS})
+
+# Link the libraries after add_executable or add_library
+target_link_libraries(my_target ${RTIX_LIBRARIES})
+```
+7. If you wish to generate a coverage report, regenerate and build using `-DTEST_COVERAGE=ON`.  Note that this turns off optimizations, so to use in an application, you'll want to delete the `build` folder and rebuild without the coverage flag on.
 ```bash
 cmake -DTEST_COVERAGE=ON ..
 make -j && make test
@@ -138,7 +146,7 @@ make -j && make test
 make coverage-xml
 make coverage-html
 ```
-7. Voila!  You're ready to develop, test, and run any of the examples.
+8. Voila!  You're ready to develop, test, and run any of the examples.
 
 ## Performance
 TODO
@@ -146,6 +154,7 @@ TODO
 ## Examples
 1. [Python Simple Publish and Subscribe](./examples/python_pub_sub/README.md)
 2. [Python Ping Pong with 2 Nodes](./examples/python_ping_pong/README.md)
+3. [C++ CMake Import Example](./examples/cmake_import/README.md)
 
 ## License
 Licensed permissively under Apache-2.0.

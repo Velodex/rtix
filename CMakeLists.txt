@@ -92,6 +92,36 @@ add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
 add_subdirectory(rtix)
 
 # ------------------------------------------------------------------------------
+# Setup the project cmake export so consumers can use find_package(rtix)
+# ------------------------------------------------------------------------------
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR}/rtix)
+set(LIB_INSTALL_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+
+install(EXPORT rtixTargets
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/rtix/cmake"
+    NAMESPACE rtix::
+)
+
+configure_package_config_file(
+    "${PROJECT_SOURCE_DIR}/cmake/rtixConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/rtixConfig.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/rtix/cmake"
+    PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/rtixConfigVersion.cmake"
+    VERSION "${PROJECT_VERSION}"
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/rtixConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/rtixConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/rtix/cmake"
+)
+
+# ------------------------------------------------------------------------------
 # Setup the coverage reporting
 # ------------------------------------------------------------------------------
 if(TEST_COVERAGE)
