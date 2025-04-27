@@ -9,7 +9,7 @@ project(rtix-cmake-import)
 
 find_package(rtix CONFIG REQUIRED)
 
-include_directories(${RTIX_INCLUDE_DIRS})
+include_directories(${RTIX_INCLUDE_DIR})
 
 add_executable(rtix-cmake-import main.cpp)
 

@@ -18,17 +18,14 @@ file(GLOB PROTO_FILES RELATIVE "${PROTO_TYPES_SOURCE_DIR}"
 foreach(PROTO_FILE IN LISTS PROTO_FILES)
   message(STATUS "Generating code for ${PROTO_FILE}")
 
-  # Python - pb2 only
-  execute_process(COMMAND python3 -m grpc_tools.protoc
-    -I${PROTO_TYPES_SOURCE_DIR} ${PROTO_TYPES_SOURCE_DIR}/${PROTO_FILE}
+  # C++ & Python
+  execute_process(COMMAND protoc
+    ${PROTO_TYPES_SOURCE_DIR}/${PROTO_FILE}
+    -I=${PROTO_TYPES_SOURCE_DIR}
+    --cpp_out=${PROTO_CPP_TARGET_DIR}
     --python_out=${PROTO_PYTHON_TARGET_DIR}
   )
 
-  # C++ - pb2 only
-  execute_process(COMMAND protoc
-    -I${PROTO_TYPES_SOURCE_DIR} ${PROTO_TYPES_SOURCE_DIR}/${PROTO_FILE}
-    --cpp_out=${PROTO_CPP_TARGET_DIR}
-  )
 endforeach()
 
 # ------------------------------------------------------------------------------
@@ -62,8 +59,6 @@ set_target_properties(${target_name} PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
   PUBLIC_HEADER "${MODULE_HEADERS}"
 )
-
-message(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
 
 install(TARGETS ${target_name}
   EXPORT rtixTargets

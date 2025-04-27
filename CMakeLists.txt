@@ -94,7 +94,7 @@ add_subdirectory(rtix)
 # ------------------------------------------------------------------------------
 # Setup the project cmake export so consumers can use find_package(rtix)
 # ------------------------------------------------------------------------------
-set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR}/rtix)
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 set(LIB_INSTALL_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
 install(EXPORT rtixTargets
