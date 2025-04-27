@@ -63,7 +63,14 @@ set_target_properties(${target_name} PROPERTIES
   PUBLIC_HEADER "${MODULE_HEADERS}"
 )
 
+message(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
+
 install(TARGETS ${target_name}
   EXPORT rtixTargets
   PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/rtix/${module_name}"
+)
+
+install(
+  FILES "${PROTO_FILES}"
+  DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/rtix/${module_name}"
 )

@@ -107,6 +107,10 @@ cmake ..
 make -j
 make test
 ```
+5. Install the python package
+```bash
+python3 -m pip install .
+```
 
 ### Method 3: [Recommended] Development with Docker (C++ and Python)
 While it is not required, we strongly recommend using Docker to manage multiple processes.  Docker is a containerized dependency management system.  We provide a Dockerfile with the necessary dependencies for RTIX development.
