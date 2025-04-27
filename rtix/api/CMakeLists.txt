@@ -7,23 +7,21 @@ set(module_name "api")
 # Run the protobuf compilers
 # ------------------------------------------------------------------------------
 
-set(PROTO_TYPES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(PROTO_CPP_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(PROTO_PYTHON_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+set(PROTO_PREFIX "rtix/api")
 
-file(GLOB PROTO_FILES RELATIVE "${PROTO_TYPES_SOURCE_DIR}"
+file(GLOB PROTO_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
   "*.proto"
 )
 
 foreach(PROTO_FILE IN LISTS PROTO_FILES)
-  message(STATUS "Generating code for ${PROTO_FILE}")
+  message(STATUS "Generating code for ${PROTO_PREFIX}/${PROTO_FILE}")
 
   # C++ & Python
   execute_process(COMMAND protoc
-    ${PROTO_TYPES_SOURCE_DIR}/${PROTO_FILE}
-    -I=${PROTO_TYPES_SOURCE_DIR}
-    --cpp_out=${PROTO_CPP_TARGET_DIR}
-    --python_out=${PROTO_PYTHON_TARGET_DIR}
+    ${PROTO_PREFIX}/${PROTO_FILE}
+    -I=${PROJECT_SOURCE_DIR}
+    --cpp_out=${PROJECT_SOURCE_DIR}
+    --python_out=${PROJECT_SOURCE_DIR}
   )
 
 endforeach()
@@ -35,8 +33,8 @@ endforeach()
 set(target_name "rtix-${module_name}")
 
 include_directories(
-  "${PROJECT_SOURCE_DIR}"
-  "${PROTOBUF_INCLUDE_DIR}"
+  ${PROJECT_SOURCE_DIR}
+  ${PROTOBUF_INCLUDE_DIR}
 )
 
 file(GLOB PROTO_FILES_PB_CC "${CMAKE_CURRENT_SOURCE_DIR}/*.pb.cc")
