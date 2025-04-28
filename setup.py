@@ -20,7 +20,7 @@ def find_protobufs() -> List[Protobuf]:
 # https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#setup-args
 setup(
     name="rtix",
-    version="0.9.1",
+    version="0.9.2",
     author="Velodex Robotics, Inc and RTIX Developers",
     description=
     "Fast and lightweight IPC and orchestration layer for robotics and embodied AI applications.",
