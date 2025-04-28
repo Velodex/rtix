@@ -27,7 +27,7 @@ foreach(PROTO_FILE IN LISTS PROTO_FILES)
   execute_process(COMMAND python -m grpc_tools.protoc
     ${PROTO_PREFIX}/${PROTO_FILE}
     -I=${PROJECT_SOURCE_DIR}
-    --python_out=${PROTO_PYTHON_TARGET_DIR}
+    --python_out=${PROJECT_SOURCE_DIR}
   )
 
 endforeach()
