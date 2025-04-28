@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from google.protobuf.message import Message
 from rtix.ipc.node import Node
+from rtix.core.status import Status
 from rtix.core.timer import Timer
 from rtix.core.exception import RTIX_THROW_IF_NOT, getFullTraceback
 from rtix.api import common_pb2
@@ -87,7 +88,7 @@ class Process:
                     Timer.Sleep(self._config.monitor_rate_s)
             except Exception as e:
                 logging.error(getFullTraceback())
-                self.publishStatus(code=common_pb2.FAILURE,
+                self.publishStatus(status=Status.FAILURE,
                                    msg="Exception {}".format(e))
                 self._running = False
 
@@ -125,14 +126,14 @@ class Process:
         """Returns the process time since the call of start()"""
         return self._timer.getElapsedS()
 
-    def publishStatus(self, code: common_pb2.Code, msg: str):
+    def publishStatus(self, status: Status, msg: str):
         """Convenience method for publishing to the status channel"""
-        status = common_pb2.Status(code=code, message=msg)
-        if code == common_pb2.FAILURE:
+        outcome = common_pb2.Outcome(status=status.value, message=msg)
+        if status == Status.FAILURE:
             logging.error(msg)
         else:
             logging.info(msg)
-        self._node.publisher(self._config.status_channel_id).send(status)
+        self._node.publisher(self._config.status_channel_id).send(outcome)
 
     def publishOutput(self, key: str, msg: Message):
         """Convenience method for publishing to an output channel (by key)"""

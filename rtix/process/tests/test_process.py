@@ -7,6 +7,7 @@ from google.protobuf.wrappers_pb2 import Int64Value, BoolValue
 
 from rtix.api import common_pb2
 from rtix.ipc.node import Node
+from rtix.core.status import Status
 from rtix.process.process import Process, ProcessConfig, InputConfig, OutputConfig
 
 from rtix.ipc.tests.test_channel_map import load_test_channel_map
@@ -29,7 +30,7 @@ class TestProcess(Process):
     def handleAction(self, action: BoolValue):
         # Need to sleep to give the fixture node time to receive
         time.sleep(0.2)
-        self.publishStatus(code=common_pb2.Code.SUCCESS, msg="Handled")
+        self.publishStatus(status=Status.SUCCESS, msg="Handled")
         self.setRunning(True)
         logging.info("Handled action")
 
@@ -96,8 +97,8 @@ def test_process():
         value=ACTION_VALUE))
 
     # Await status
-    status = common_pb2.Status()
-    fixture_node.subscriber(channel_id="status").recv(msg=status)
+    outcome = common_pb2.Outcome()
+    fixture_node.subscriber(channel_id="status").recv(msg=outcome)
 
     # Send the 'x' channel
     fixture_node.publisher(channel_id="x").send(msg=Int64Value(
@@ -113,7 +114,7 @@ def test_process():
     test_process_thread.join()
 
     # These will only be true if the input and action was received
-    assert status.code == common_pb2.Code.SUCCESS
+    assert outcome.status == common_pb2.Status.SUCCESS
     assert output.value == INPUT_VALUE
 
 

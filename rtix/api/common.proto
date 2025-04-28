@@ -23,7 +23,7 @@ message Packet {
 }
 
 /// This code represents the outcome of an operation.
-enum Code {
+enum Status {
   RUNNING = 0;
   SUCCESS = 1;
   FAILURE = 2;
@@ -31,7 +31,7 @@ enum Code {
 
 /// This message includes the code and a string detailing the outcome.  If the
 /// outcome is failure, the detail message will identify the failure mechanism.
-message Status {
-  Code code = 1;
+message Outcome {
+  Status status = 1;
   string message = 2;
 }

@@ -11,8 +11,7 @@
 
 using google::protobuf::BoolValue;
 using google::protobuf::Int64Value;
-using rtix::api::common::Code;
-using rtix::api::common::Status;
+using rtix::core::Status;
 using rtix::core::Timer;
 using rtix::ipc::ChannelMap;
 using rtix::ipc::Node;
@@ -42,7 +41,7 @@ class TestProcess : public Process<BoolValue> {
   void handleAction(const BoolValue& action) override {
     // Need to sleep to give the fixture node time to receive
     Timer::Sleep(0.2);
-    publishStatus(Code::SUCCESS, "Handled");
+    publishStatus(Status::SUCCESS, "Handled");
     setRunning(true);
     SPDLOG_INFO("Handled action");
   }
@@ -103,8 +102,8 @@ TEST(Process, Process) {
   fixture_node.publisher("action")->send(action);
 
   // Await status
-  Status status{};
-  fixture_node.subscriber("status")->recv(status);
+  rtix::api::common::Outcome outcome{};
+  fixture_node.subscriber("status")->recv(outcome);
 
   // Send the 'x' channel
   Int64Value message{};
@@ -121,6 +120,6 @@ TEST(Process, Process) {
   test_process_thread.join();
 
   // These will only be true if the input and action was received
-  EXPECT_EQ(status.code(), Code::SUCCESS);
+  EXPECT_EQ(outcome.status(), rtix::api::common::Status::SUCCESS);
   EXPECT_EQ(output.value(), INPUT_VALUE);
 }

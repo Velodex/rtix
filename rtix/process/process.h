@@ -5,7 +5,7 @@
 
 #include <google/protobuf/message.h>
 #include <unordered_map>
-#include "rtix/api/common.pb.h"
+#include "rtix/core/status.h"
 #include "rtix/core/timer.h"
 #include "rtix/ipc/node.h"
 
@@ -13,10 +13,7 @@ namespace rtix {
 namespace process {
 
 using google::protobuf::Message;
-using rtix::api::common::Code;
-using rtix::api::common::FAILURE;
-using rtix::api::common::Status;
-using rtix::api::common::SUCCESS;
+using rtix::core::Status;
 using rtix::core::Timer;
 using rtix::ipc::Node;
 
@@ -75,7 +72,7 @@ class Process {
 
   void setRunning(bool running);
   double getProcessTimeS() const;
-  void publishStatus(const Code& code, const std::string& msg) const;
+  void publishStatus(const Status& status, const std::string& msg) const;
   void publishOutput(const std::string& key, const Message& msg) const;
   bool receiveInput(const std::string& key, Message& msg) const;
   void flushInput(const std::string& key) const;

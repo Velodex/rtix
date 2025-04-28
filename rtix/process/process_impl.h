@@ -2,6 +2,7 @@
 // Licensed under Apache-2.0. http://www.apache.org/licenses/LICENSE-2.0
 
 #include <spdlog/spdlog.h>
+#include "rtix/api/common.pb.h"
 #include "rtix/core/exception.h"
 #include "rtix/core/format.h"
 #include "rtix/process/process.h"
@@ -42,10 +43,10 @@ void Process<ActionT>::run() {
       }
     } catch (const std::exception& e) {
       SPDLOG_ERROR(core::getFullTraceback());
-      publishStatus(FAILURE, RTIX_FMT("Exception " << e.what()));
+      publishStatus(Status::FAILURE, RTIX_FMT("Exception " << e.what()));
       _running = false;
     } catch (...) {
-      publishStatus(FAILURE, "Encountered unknown exception");
+      publishStatus(Status::FAILURE, "Encountered unknown exception");
       _running = false;
     }
   }
@@ -67,17 +68,17 @@ double Process<ActionT>::getProcessTimeS() const {
 }
 
 template <typename ActionT>
-void Process<ActionT>::publishStatus(const Code& code,
+void Process<ActionT>::publishStatus(const Status& status,
                                      const std::string& msg) const {
-  auto status = Status();
-  status.set_code(code);
-  status.set_message(msg);
-  if (code == FAILURE) {
+  auto outcome = rtix::api::common::Outcome();
+  outcome.set_status(rtix::api::common::Status(status));
+  outcome.set_message(msg);
+  if (status == Status::FAILURE) {
     SPDLOG_ERROR(msg);
   } else {
     SPDLOG_INFO(msg);
   }
-  _node.publisher(_config.status_channel_id)->send(status);
+  _node.publisher(_config.status_channel_id)->send(outcome);
 }
 
 template <typename ActionT>
