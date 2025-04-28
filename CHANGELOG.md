@@ -24,6 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.0] - 2025-03-18
 ### Added
-- Initial `rtix` library containing core, ipc, and api modules.
+- Initial `rtix` library containing core, ipc, and types modules.
 - Documentation, Apache-2.0 license and changelog
 - Example usage

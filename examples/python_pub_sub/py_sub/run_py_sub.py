@@ -3,7 +3,7 @@
 
 import logging
 from google.protobuf.wrappers_pb2 import Int64Value
-from rtix.api.common_pb2 import Metadata
+from rtix.types.common_pb2 import Metadata
 
 from rtix.core.logging import setupDefaultLogging
 from rtix.core.timer import getTimestampNs, Timer
