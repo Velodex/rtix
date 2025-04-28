@@ -16,12 +16,18 @@ file(GLOB PROTO_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
 foreach(PROTO_FILE IN LISTS PROTO_FILES)
   message(STATUS "Generating code for ${PROTO_PREFIX}/${PROTO_FILE}")
 
-  # C++ & Python
+  # C++
   execute_process(COMMAND protoc
     ${PROTO_PREFIX}/${PROTO_FILE}
     -I=${PROJECT_SOURCE_DIR}
     --cpp_out=${PROJECT_SOURCE_DIR}
-    --python_out=${PROJECT_SOURCE_DIR}
+  )
+
+  # Python
+  execute_process(COMMAND python -m grpc_tools.protoc
+    ${PROTO_PREFIX}/${PROTO_FILE}
+    -I=${PROJECT_SOURCE_DIR}
+    --python_out=${PROTO_PYTHON_TARGET_DIR}
   )
 
 endforeach()
