@@ -7,6 +7,8 @@ from setuptools import Command, setup, find_packages
 from setuptools.command.build import build
 import subprocess
 
+TYPES_DIR = "rtix/types"
+
 
 class GenerateProtos(Command):
     """
@@ -28,16 +30,15 @@ class GenerateProtos(Command):
                 "python3",
                 "-m",
                 "grpc_tools.protoc",
-                "--proto_path=rtix/api",
-                "--python_out=rtix/api",
+                f"--proto_path={TYPES_DIR}",
+                f"--python_out={TYPES_DIR}",
                 proto,
             ]
             subprocess.call(protoc_call)
 
     def find_protobufs(self) -> List[str]:
-        proto_dir = "rtix/api"
         protos = []
-        for file in os.listdir(proto_dir):
+        for file in os.listdir(TYPES_DIR):
             if file.endswith(".proto"):
                 protos.append(file)
         return protos
@@ -56,7 +57,7 @@ setup(
     description=
     "Fast and lightweight IPC and orchestration layer for robotics and embodied AI applications.",
     packages=find_packages(include=["rtix", "rtix.*"]),
-    package_data={"rtix.api": ["*.proto"]},
+    package_data={"rtix.types": ["*.proto"]},
     cmdclass={
         "build": CustomBuild,
         "generate_protos": GenerateProtos,
