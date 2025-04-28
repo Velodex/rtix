@@ -35,8 +35,9 @@ git push origin v0.0.0
 ## Packaging for PyPi
 Based on the [Python instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/).
 
-Inside, the Docker container, build the package distribution
+Inside, the Docker container, build the package distribution, including the generated protobuf files
 ```bash
+python3 -m setup.py generate_protos
 python3 -m build
 ```
 
