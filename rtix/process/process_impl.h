@@ -2,10 +2,10 @@
 // Licensed under Apache-2.0. http://www.apache.org/licenses/LICENSE-2.0
 
 #include <spdlog/spdlog.h>
-#include "rtix/api/common.pb.h"
 #include "rtix/core/exception.h"
 #include "rtix/core/format.h"
 #include "rtix/process/process.h"
+#include "rtix/types/common.pb.h"
 
 namespace rtix {
 namespace process {
@@ -70,8 +70,8 @@ double Process<ActionT>::getProcessTimeS() const {
 template <typename ActionT>
 void Process<ActionT>::publishStatus(const Status& status,
                                      const std::string& msg) const {
-  auto outcome = rtix::api::common::Outcome();
-  outcome.set_status(rtix::api::common::Status(status));
+  auto outcome = rtix::types::common::Outcome();
+  outcome.set_status(rtix::types::common::Status(status));
   outcome.set_message(msg);
   if (status == Status::FAILURE) {
     SPDLOG_ERROR(msg);

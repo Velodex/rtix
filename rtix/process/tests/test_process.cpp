@@ -3,11 +3,11 @@
 
 #include <google/protobuf/wrappers.pb.h>
 #include <gtest/gtest.h>
-#include "rtix/api/common.pb.h"
 #include "rtix/core/timer.h"
 #include "rtix/ipc/channel_map.h"
 #include "rtix/ipc/node.h"
 #include "rtix/process/process.h"
+#include "rtix/types/common.pb.h"
 
 using google::protobuf::BoolValue;
 using google::protobuf::Int64Value;
@@ -102,7 +102,7 @@ TEST(Process, Process) {
   fixture_node.publisher("action")->send(action);
 
   // Await status
-  rtix::api::common::Outcome outcome{};
+  rtix::types::common::Outcome outcome{};
   fixture_node.subscriber("status")->recv(outcome);
 
   // Send the 'x' channel
@@ -120,6 +120,6 @@ TEST(Process, Process) {
   test_process_thread.join();
 
   // These will only be true if the input and action was received
-  EXPECT_EQ(outcome.status(), rtix::api::common::Status::SUCCESS);
+  EXPECT_EQ(outcome.status(), rtix::types::common::Status::SUCCESS);
   EXPECT_EQ(output.value(), INPUT_VALUE);
 }

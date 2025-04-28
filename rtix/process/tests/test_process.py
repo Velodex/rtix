@@ -5,7 +5,7 @@ import time
 import logging
 from google.protobuf.wrappers_pb2 import Int64Value, BoolValue
 
-from rtix.api import common_pb2
+from rtix.types import common_pb2
 from rtix.ipc.node import Node
 from rtix.core.status import Status
 from rtix.process.process import Process, ProcessConfig, InputConfig, OutputConfig

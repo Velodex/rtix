@@ -22,7 +22,7 @@ const std::string TIMEOUT_KEY = "timeout_ms";
 const std::string MSG_PREFIX = "m";
 
 std::string packMessage(const Message& msg) {
-  rtix::api::common::Packet packet{};
+  rtix::types::common::Packet packet{};
   packet.mutable_payload()->PackFrom(msg);
   packet.mutable_metadata()->set_timestamp_ns(core::getTimestampNs());
   std::string data;
@@ -31,7 +31,7 @@ std::string packMessage(const Message& msg) {
 }
 
 void unpackMessage(const std::string& data, Metadata& metadata, Message& msg) {
-  rtix::api::common::Packet packet{};
+  rtix::types::common::Packet packet{};
   metadata.Clear();
   msg.Clear();
   std::size_t n = MSG_PREFIX.length();

@@ -10,13 +10,13 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include "rtix/api/common.pb.h"
+#include "rtix/types/common.pb.h"
 
 namespace rtix {
 namespace ipc {
 
 using google::protobuf::Message;
-using rtix::api::common::Metadata;
+using rtix::types::common::Metadata;
 
 /// Packs the protobuf message into a binary data packet with metadata
 std::string packMessage(const Message& msg);

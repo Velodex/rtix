@@ -32,7 +32,7 @@ add_executable(${test_name}
 )
 
 add_dependencies(${test_name} 
-  rtix-api
+  rtix-types
   rtix-ipc
 )
 
@@ -40,7 +40,7 @@ target_link_libraries(${test_name} PRIVATE
   ${target_name}
   ${GTEST_LIBRARIES}
   ${GTEST_MAIN_LIBRARIES}
-  rtix-api
+  rtix-types
   rtix-ipc
   pthread
 )

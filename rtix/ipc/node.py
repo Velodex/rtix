@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import pynng as nng
 
 from google.protobuf.message import Message
-import rtix.api.common_pb2 as common_pb2
+import rtix.types.common_pb2 as common_pb2
 
 from rtix.core.timer import getTimestampNs
 

@@ -22,12 +22,12 @@ add_library(${target_name} STATIC
 )
 
 add_dependencies(${target_name}
-  rtix-api
+  rtix-types
   rtix-core
 )
 
 target_link_libraries(${target_name} PRIVATE
-  rtix-api
+  rtix-types
   rtix-core
   nng::nng
   spdlog::spdlog

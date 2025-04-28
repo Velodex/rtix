@@ -1,13 +1,13 @@
 # Copyright (c) 2025 Velodex Robotics, Inc and RTIX Developers.
 # Licensed under Apache-2.0. http://www.apache.org/licenses/LICENSE-2.0
 
-set(module_name "api")
+set(module_name "types")
 
 # ------------------------------------------------------------------------------
 # Run the protobuf compilers
 # ------------------------------------------------------------------------------
 
-set(PROTO_PREFIX "rtix/api")
+set(PROTO_PREFIX "rtix/types")
 
 file(GLOB PROTO_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
   "*.proto"

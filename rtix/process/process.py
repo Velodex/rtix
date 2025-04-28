@@ -10,7 +10,7 @@ from rtix.ipc.node import Node
 from rtix.core.status import Status
 from rtix.core.timer import Timer
 from rtix.core.exception import RTIX_THROW_IF_NOT, getFullTraceback
-from rtix.api import common_pb2
+from rtix.types import common_pb2
 
 
 @dataclass
