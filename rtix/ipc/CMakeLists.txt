@@ -30,7 +30,6 @@ target_link_libraries(${target_name} PRIVATE
   rtix-types
   rtix-core
   nng::nng
-  spdlog::spdlog
   yaml-cpp
   ${PROTOBUF_LIBRARY}
   pthread
