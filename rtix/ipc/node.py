@@ -129,7 +129,7 @@ class Subscriber:
             logging.debug(f"Subscriber '{self._channel_id}' received data")
             return True
         except nng.Timeout:
-            logging.debug(f"Subscriber '{self._channel_id}' recv timeout")
+            return False
         except Exception as e:
             if block:
                 logging.error(

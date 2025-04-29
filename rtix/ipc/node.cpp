@@ -139,7 +139,6 @@ bool Subscriber::recv(Message& msg, Metadata& metadata, bool block) const {
   }
   if ((rv = nng_recv(_socket, &buf, &sz, flags)) != 0) {
     if ((rv == NNG_ETIMEDOUT) || (rv == NNG_EAGAIN)) {
-      SPDLOG_DEBUG("Subscriber '{}' recv timeout ({})", _channel_id, rv);
       return false;
     }
     SPDLOG_ERROR("Subscriber '{}' recv failed ({})", _channel_id, rv);
