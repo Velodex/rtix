@@ -4,6 +4,7 @@
 #include "rtix/core/logging.h"
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <chrono>
 
 namespace rtix {
 namespace core {
@@ -12,7 +13,8 @@ void setupDefaultLogging(const std::string& log_file,
                          spdlog::level::level_enum console_level,
                          spdlog::level::level_enum detailed_level,
                          const std::string& log_format,
-                         bool truncate) {
+                         bool truncate,
+                         int flush_interval_s) {
   auto console_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
   console_sink->set_pattern(log_format);
   console_sink->set_level(console_level);
@@ -23,10 +25,12 @@ void setupDefaultLogging(const std::string& log_file,
   file_sink->set_level(detailed_level);
 
   spdlog::logger logger("multi_sink", {console_sink, file_sink});
-  logger.set_level(detailed_level);
-  spdlog::set_default_logger(std::make_shared<spdlog::logger>(logger));
+  auto logger_ptr = std::make_shared<spdlog::logger>(logger);
+  logger_ptr->set_level(detailed_level);
+  spdlog::register_logger(logger_ptr);
+  spdlog::set_default_logger(logger_ptr);
   spdlog::set_pattern(log_format);
-  spdlog::flush_on(spdlog::level::info);
+  spdlog::flush_every(std::chrono::seconds(flush_interval_s));
 }
 
 }  // namespace core
