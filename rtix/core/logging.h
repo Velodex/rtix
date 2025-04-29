@@ -20,7 +20,8 @@ void setupDefaultLogging(
     const std::string& log_file,
     spdlog::level::level_enum console_level = spdlog::level::info,
     spdlog::level::level_enum detailed_level = spdlog::level::debug,
-    const std::string& log_format = DETAILED_LOG_FMT);
+    const std::string& log_format = DETAILED_LOG_FMT,
+    bool truncate = true);
 
 }  // namespace core
 }  // namespace rtix
