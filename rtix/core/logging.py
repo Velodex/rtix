@@ -13,6 +13,7 @@ def setupDefaultLogging(
     console_level: int = logging.INFO,
     detailed_level: int = logging.DEBUG,
     log_format: str = DETAILED_LOG_FMT,
+    truncate: bool = False,
 ):
     """Initializes a default logger, writing to stdout and file"""
     logger = logging.getLogger()
@@ -20,7 +21,8 @@ def setupDefaultLogging(
 
     formatter = logging.Formatter(log_format)
 
-    stream_handler = logging.StreamHandler(sys.stdout)
+    mode = "w" if truncate else "a"
+    stream_handler = logging.StreamHandler(sys.stdout, mode=mode)
     stream_handler.setLevel(console_level)
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
