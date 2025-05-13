@@ -21,13 +21,13 @@ def setupDefaultLogging(
 
     formatter = logging.Formatter(log_format)
 
-    mode = "w" if truncate else "a"
-    stream_handler = logging.StreamHandler(sys.stdout, mode=mode)
+    stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setLevel(console_level)
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
-    file_handler = logging.FileHandler(log_file)
+    mode = "w" if truncate else "a"
+    file_handler = logging.FileHandler(log_file, mode=mode)
     file_handler.setLevel(detailed_level)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
