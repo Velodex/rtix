@@ -9,9 +9,19 @@ def getTimestampNs():
     return time.time_ns()
 
 
+def nsToS(time_ns: int) -> float:
+    """Convert nanoseconds to seconds"""
+    return float(time_ns * 1e-9)
+
+
 def nsToMs(time_ns: int) -> int:
     """Convert nanoseconds to milliseconds"""
     return int(time_ns * 1e-6)
+
+
+def nsToUs(time_ns: int) -> int:
+    """Convert nanoseconds to microseconds"""
+    return int(time_ns * 1e-3)
 
 
 class Timer:
@@ -30,11 +40,15 @@ class Timer:
         self.start()
 
     def start(self):
-        self._tic = time.time()
+        self._tic_ns = getTimestampNs()
 
     def getElapsedS(self) -> float:
-        toc = time.time()
-        return toc - self._tic
+        toc_ns = getTimestampNs()
+        return nsToS(toc_ns - self._tic_ns)
+
+    def getElapsedNs(self) -> int:
+        toc_ns = getTimestampNs()
+        return toc_ns - self._tic_ns
 
     @staticmethod
     def Sleep(duration_s: float):

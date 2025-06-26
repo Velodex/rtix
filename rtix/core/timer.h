@@ -11,8 +11,14 @@ namespace core {
 /// Returns the current time since epoch (ns)
 uint64_t getTimestampNs();
 
+/// Convert nanoseconds to seconds
+double nsToS(uint64_t time_ns);
+
 /// Convert nanoseconds to milliseconds
 uint64_t nsToMs(uint64_t time_ns);
+
+/// Convert nanoseconds to microseconds
+uint64_t nsToUs(uint64_t time_ns);
 
 /// A timer to keep track of elapsed time and sleep/spinlock the thread
 class Timer {
@@ -25,7 +31,7 @@ class Timer {
   virtual ~Timer() = default;
   void start();
   double getElapsedS() const;
-  unsigned getElapsedNs() const;
+  uint64_t getElapsedNs() const;
   static void Sleep(double duration_s);
   static void Spinlock(double duration_s);
 

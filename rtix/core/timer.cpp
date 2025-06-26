@@ -13,8 +13,16 @@ uint64_t getTimestampNs() {
       .count();
 }
 
+double nsToS(uint64_t time_ns) {
+  return static_cast<double>(time_ns * 1e-9);
+}
+
 uint64_t nsToMs(uint64_t time_ns) {
   return static_cast<uint64_t>(time_ns * 1e-6);
+}
+
+uint64_t nsToUs(uint64_t time_ns) {
+  return static_cast<uint64_t>(time_ns * 1e-3);
 }
 
 Timer::Timer() {
@@ -27,12 +35,12 @@ void Timer::start() {
 
 double Timer::getElapsedS() const {
   auto toc = std::chrono::steady_clock::now();
-  double et_us =
-      std::chrono::duration_cast<std::chrono::microseconds>(toc - _tic).count();
-  return et_us / US_PER_S;
+  double et_ns =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(toc - _tic).count();
+  return et_ns / NS_PER_S;
 }
 
-unsigned Timer::getElapsedNs() const {
+uint64_t Timer::getElapsedNs() const {
   auto toc = std::chrono::steady_clock::now();
   return std::chrono::duration_cast<std::chrono::nanoseconds>(toc - _tic)
       .count();
@@ -44,11 +52,11 @@ void Timer::Sleep(double duration_s) {
 
 void Timer::Spinlock(double duration_s) {
   auto tic = std::chrono::steady_clock::now();
-  double et_us = 0;
-  while (et_us < duration_s * US_PER_S) {
+  double et_ns = 0;
+  while (et_ns < duration_s * NS_PER_S) {
     auto toc = std::chrono::steady_clock::now();
-    et_us = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic)
-                .count();
+    et_ns =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(toc - tic).count();
   }
 }
 
