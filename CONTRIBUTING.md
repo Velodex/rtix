@@ -37,7 +37,7 @@ Based on the [Python instructions](https://packaging.python.org/en/latest/tutori
 
 Inside, the Docker container, build the package distribution, including the generated protobuf files
 ```bash
-python3 -m setup.py generate_protos
+python3 -m setup generate_protos
 python3 -m build
 ```
 
