@@ -43,7 +43,7 @@ def test_node():
         node_a_int = node_a.publisher(channel_id="node_a_int")
 
         # Sleep before sending to give the receiver time to spin up and listen
-        time.sleep(0.1)
+        time.sleep(1.0)
         node_a_int.send(msg=Int64Value(value=11))
 
     def node_b_callback(channel_map: ChannelMap):
@@ -74,3 +74,7 @@ def test_node():
 
     node_a_thread.join()
     node_b_thread.join()
+
+
+if __name__ == "__main__":
+    test_node()

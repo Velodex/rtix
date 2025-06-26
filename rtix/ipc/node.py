@@ -100,8 +100,11 @@ class Subscriber:
         self._channel_id = config.channel_id
         self._timeout_ms = config.timeout_ms
         self._address = "ipc:///tmp/" + config.channel_id + ".ipc"
+        # If block_on_dial is unset, an error will be logged even if the dial
+        # is completed asynchronously through retries.
         self._socket = nng.Sub0(dial=self._address,
-                                recv_timeout=config.timeout_ms)
+                                recv_timeout=config.timeout_ms,
+                                block_on_dial=False)
         self._socket.subscribe(b"")  # everything
         self._socket.recv_buffer_size = 1  # important to ensure latest
         logging.info("Started subscriber '{}' at {}".format(
