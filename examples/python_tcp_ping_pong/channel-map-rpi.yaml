@@ -1,0 +1,8 @@
+node_rpi:
+  publishers:
+    - channel_id: ping
+      address: "tcp://0.0.0.0:9000" # Listen on all interfaces
+  subscribers:
+    - channel_id: pong
+      address: "tcp://192.168.2.100:9001" # Dial the PC's IP
+      timeout_ms: 1000

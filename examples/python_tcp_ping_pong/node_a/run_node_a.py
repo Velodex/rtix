@@ -23,12 +23,12 @@ def main():
     logging.info("Starting Node A")
 
     # Load the channel map
-    with open("../channel-map.yaml") as file:
+    with open("../channel-map-rpi.yaml") as file:
         yaml_dict = yaml.safe_load(file)
         channel_map = ChannelMap.LoadYaml(yaml_dict)
 
     # Create the node
-    node = Node(config=channel_map.nodes["node_a"])
+    node = Node(config=channel_map.nodes["node_rpi"])
 
     # Wait for the containers to spin up
     Timer.Sleep(2.0)
