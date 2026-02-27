@@ -45,12 +45,20 @@ void unpackMessage(const std::string& data, Metadata& metadata, Message& msg) {
 Publisher::Config Publisher::Config::LoadYaml(const YAML::Node& yaml_node) {
   Publisher::Config config{};
   config.channel_id = yaml_node[CHANNEL_KEY].as<std::string>();
+  if (yaml_node["address"]) {
+    config.address = yaml_node["address"].as<std::string>();
+  }
   return config;
 }
 
 Publisher::Publisher(const Publisher::Config& config)
     : _channel_id(config.channel_id) {
-  _address = std::string("ipc:///tmp/") + _channel_id + std::string(".ipc");
+  if (!config.address.empty()) {
+    _address = config.address;
+  } else {
+    _address = std::string("ipc:///tmp/") + _channel_id + std::string(".ipc");
+  }
+
   int rv;
   if ((rv = nng_pub0_open(&_socket)) != 0) {
     SPDLOG_ERROR("Pub '{}' nng_pub0_open failed ({})", _channel_id, rv);
@@ -82,12 +90,20 @@ Subscriber::Config Subscriber::Config::LoadYaml(const YAML::Node& yaml_node) {
   Subscriber::Config config{};
   config.channel_id = yaml_node[CHANNEL_KEY].as<std::string>();
   config.timeout_ms = yaml_node[TIMEOUT_KEY].as<int>();
+  if (yaml_node["address"]) {
+    config.address = yaml_node["address"].as<std::string>();
+  }
   return config;
 }
 
 Subscriber::Subscriber(const Subscriber::Config& config)
     : _channel_id(config.channel_id), _timeout_ms(config.timeout_ms) {
-  _address = std::string("ipc:///tmp/") + _channel_id + std::string(".ipc");
+  if (!config.address.empty()) {
+    _address = config.address;
+  } else {
+    _address = std::string("ipc:///tmp/") + _channel_id + std::string(".ipc");
+  }
+  
   int rv;
   if ((rv = nng_sub0_open(&_socket)) != 0) {
     SPDLOG_ERROR("Sub '{}' nng_sub0_open failed ({})", _channel_id, rv);
