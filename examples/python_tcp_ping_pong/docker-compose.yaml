@@ -1,0 +1,20 @@
+services:
+  node_a:
+    image: rtix-dev
+    privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /rtix/examples/python_tcp_ping_pong/node_a
+    volumes:
+      - ../..:/rtix
+    command: python3 run_node_a.py
+
+  node_b:
+    image: rtix-dev
+    privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /rtix/examples/python_tcp_ping_pong/node_b
+    volumes:
+      - ../..:/rtix
+    command: python3 run_node_b.py

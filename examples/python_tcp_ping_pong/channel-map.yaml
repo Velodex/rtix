@@ -1,0 +1,21 @@
+# TCP Channel Map
+# Publishers listen on 0.0.0.0 with a unique port.
+# Subscribers dial the host/container name and port.
+
+node_a:
+  publishers:
+    - channel_id: ping
+      address: "tcp://0.0.0.0:9000"
+  subscribers:
+    - channel_id: pong
+      address: "tcp://node_b:9001"
+      timeout_ms: 1000
+
+node_b:
+  publishers:
+    - channel_id: pong
+      address: "tcp://0.0.0.0:9001"
+  subscribers:
+    - channel_id: ping
+      address: "tcp://node_a:9000"
+      timeout_ms: 1000
