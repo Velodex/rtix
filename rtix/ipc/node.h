@@ -29,6 +29,7 @@ class Publisher {
  public:
   struct Config {
     std::string channel_id;
+    std::string address;
 
     static Config LoadYaml(const YAML::Node& yaml_node);
   };
@@ -49,6 +50,7 @@ class Subscriber {
   struct Config {
     std::string channel_id;
     int timeout_ms;
+    std::string address;
 
     static Config LoadYaml(const YAML::Node& yaml_node);
   };

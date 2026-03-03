@@ -48,16 +48,23 @@ class Publisher:
     @dataclass
     class Config:
         channel_id: str
+        address: str = ""
 
         @staticmethod
         def LoadYaml(yaml_dict: Dict[str, Any]) -> Publisher.Config:
             """Creates the config object loaded from YAML"""
-            return Publisher.Config(channel_id=yaml_dict[CHANNEL_KEY])
+            return Publisher.Config(
+                channel_id=yaml_dict[CHANNEL_KEY],
+                address=yaml_dict.get("address", ""),
+            )
 
     def __init__(self, config: Config):
         """Initializes the publisher from config"""
         self._channel_id = config.channel_id
-        self._address = "ipc:///tmp/" + config.channel_id + ".ipc"
+        if config.address:
+            self._address = config.address
+        else:
+            self._address = "ipc:///tmp/" + config.channel_id + ".ipc"
         self._socket = nng.Pub0(listen=self._address)
         logging.info("Started publisher '{}' at {}".format(
             self._channel_id, self._address))
@@ -86,6 +93,7 @@ class Subscriber:
     class Config:
         channel_id: str
         timeout_ms: int
+        address: str = ""
 
         @staticmethod
         def LoadYaml(yaml_dict: Dict[str, Any]) -> Subscriber.Config:
@@ -93,13 +101,17 @@ class Subscriber:
             return Subscriber.Config(
                 channel_id=yaml_dict[CHANNEL_KEY],
                 timeout_ms=yaml_dict[TIMEOUT_KEY],
+                address=yaml_dict.get("address", ""),
             )
 
     def __init__(self, config: Config):
         """Initializes the subscriber from config"""
         self._channel_id = config.channel_id
         self._timeout_ms = config.timeout_ms
-        self._address = "ipc:///tmp/" + config.channel_id + ".ipc"
+        if config.address:
+            self._address = config.address
+        else:
+            self._address = "ipc:///tmp/" + config.channel_id + ".ipc"
         # If block_on_dial is unset, an error will be logged even if the dial
         # is completed asynchronously through retries.
         self._socket = nng.Sub0(dial=self._address,
