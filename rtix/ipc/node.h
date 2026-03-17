@@ -68,6 +68,30 @@ class Subscriber {
   nng_socket _socket;
 };
 
+/// Push publisher for sending messages to remote receivers using Push0/Pull0 protocol.
+/// Unlike Publisher which listens locally, PushPublisher can dial remote TCP addresses.
+/// Useful for sending commands to remote services that use Pull0 to receive messages.
+class PushPublisher {
+ public:
+  struct Config {
+    std::string channel_id;
+    std::string address;  // Remote address to dial (e.g., "tcp://192.168.1.100:9001")
+    bool send_raw_protobuf{false};  // If true, send raw protobuf without RTIX Packet wrapper
+
+    static Config LoadYaml(const YAML::Node& yaml_node);
+  };
+
+  PushPublisher(const Config& config);
+  virtual ~PushPublisher();
+  bool send(const Message& msg) const;
+
+ private:
+  std::string _channel_id{};
+  std::string _address{};
+  bool _send_raw_protobuf{false};
+  nng_socket _socket;
+};
+
 /// Primary interface to manage multiple pub/sub within a single process
 class Node {
  public:
