@@ -4,6 +4,7 @@
 #include "rtix/ipc/node.h"
 #include <nng/protocol/pubsub0/pub.h>
 #include <nng/protocol/pubsub0/sub.h>
+#include <nng/protocol/pipeline0/push.h>
 #include <spdlog/spdlog.h>
 #include <cstring>
 #include "rtix/core/exception.h"
@@ -201,6 +202,82 @@ std::shared_ptr<const Subscriber> Node::subscriber(
   auto it = _subs.find(channel_id);
   RTIX_THROW_IF_NOT(it != _subs.end(), "IPC", "Subscriber not found");
   return it->second;
+}
+
+PushPublisher::Config PushPublisher::Config::LoadYaml(const YAML::Node& yaml_node) {
+  PushPublisher::Config config{};
+  config.channel_id = yaml_node[CHANNEL_KEY].as<std::string>();
+  if (yaml_node["address"]) {
+    config.address = yaml_node["address"].as<std::string>();
+  }
+  if (yaml_node["send_raw_protobuf"]) {
+    config.send_raw_protobuf = yaml_node["send_raw_protobuf"].as<bool>();
+  }
+  return config;
+}
+
+PushPublisher::PushPublisher(const PushPublisher::Config& config)
+    : _channel_id(config.channel_id),
+      _address(config.address),
+      _send_raw_protobuf(config.send_raw_protobuf) {
+  if (_address.empty()) {
+    RTIX_THROW_IF_NOT(false, "IPC", "PushPublisher requires an address to dial");
+  }
+
+  int rv;
+  if ((rv = nng_push0_open(&_socket)) != 0) {
+    SPDLOG_ERROR("PushPub '{}' nng_push0_open failed ({})", _channel_id, rv);
+    RTIX_THROW_IF_NOT(false, "IPC", "Failed to start push publisher");
+  }
+  
+  // Dial the remote address (non-blocking)
+  // NNG will retry in the background if connection isn't immediately available
+  rv = nng_dial(_socket, _address.c_str(), NULL, NNG_FLAG_NONBLOCK);
+  if (rv != 0 && rv != NNG_EAGAIN) {
+    // Only fail on non-recoverable errors (not EAGAIN which means connection in progress)
+    SPDLOG_WARN("PushPub '{}' nng_dial failed ({}) - connection may be established later", _channel_id, rv);
+    // Don't throw - allow connection to be established later
+  } else if (rv == 0) {
+    SPDLOG_INFO("PushPub '{}' connected to {}", _channel_id, _address);
+  } else {
+    SPDLOG_INFO("PushPub '{}' dialing {} (connection in progress)", _channel_id, _address);
+  }
+}
+
+PushPublisher::~PushPublisher() {
+  nng_close(_socket);
+}
+
+bool PushPublisher::send(const Message& msg) const {
+  int rv;
+  std::string data;
+  
+  if (_send_raw_protobuf) {
+    // Send raw protobuf serialization (for compatibility with non-RTIX receivers)
+    if (!msg.SerializeToString(&data)) {
+      SPDLOG_ERROR("PushPub '{}' failed to serialize message", _channel_id);
+      return false;
+    }
+  } else {
+    // Send wrapped in RTIX Packet format (standard RTIX behavior)
+    data = packMessage(msg);
+  }
+  
+  rv = nng_send(_socket, (void*)data.c_str(), data.length(), 0);
+  if (rv != 0) {
+    // Check for connection errors
+    if (rv == NNG_ECLOSED || rv == NNG_ECONNREFUSED || rv == NNG_ECONNRESET) {
+      SPDLOG_WARN("PushPub '{}' connection lost ({})", _channel_id, rv);
+    } else if (rv == NNG_EAGAIN) {
+      // Socket buffer full or connection still establishing - this is recoverable
+      SPDLOG_DEBUG("PushPub '{}' send temporarily failed (EAGAIN)", _channel_id);
+    } else {
+      SPDLOG_DEBUG("PushPub '{}' send failed ({})", _channel_id, rv);
+    }
+    return false;
+  }
+  SPDLOG_DEBUG("PushPub '{}' sent data", _channel_id);
+  return true;
 }
 
 }  // namespace ipc

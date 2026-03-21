@@ -86,6 +86,63 @@ class Publisher:
         return False
 
 
+class PushPublisher:
+    """Push publisher for sending messages to remote receivers using Push0/Pull0 protocol.
+    Unlike Publisher which listens locally, PushPublisher can dial remote TCP addresses.
+    Useful for sending commands to remote services that use Pull0 to receive messages.
+    """
+
+    @dataclass
+    class Config:
+        channel_id: str
+        address: str  # Remote address to dial (e.g., "tcp://192.168.1.100:9001")
+        send_raw_protobuf: bool = False  # If true, send raw protobuf without RTIX Packet wrapper
+
+        @staticmethod
+        def LoadYaml(yaml_dict: Dict[str, Any]) -> PushPublisher.Config:
+            """Creates the config object loaded from YAML"""
+            return PushPublisher.Config(
+                channel_id=yaml_dict[CHANNEL_KEY],
+                address=yaml_dict.get("address", ""),
+                send_raw_protobuf=yaml_dict.get("send_raw_protobuf", False),
+            )
+
+    def __init__(self, config: Config):
+        """Initializes the push publisher from config"""
+        self._channel_id = config.channel_id
+        if not config.address:
+            raise ValueError("PushPublisher requires an address to dial")
+        self._address = config.address
+        self._send_raw_protobuf = config.send_raw_protobuf
+        
+        # Use Push0 protocol to dial remote address
+        self._socket = nng.Push0(dial=self._address, block_on_dial=False)
+        logging.info("Started push publisher '{}' dialing {}".format(
+            self._channel_id, self._address))
+
+    def __del__(self):
+        """Cleans up the socket"""
+        if hasattr(self, '_socket'):
+            self._socket.close()
+
+    def send(self, msg: Message) -> bool:
+        """Send the protobuf message (blocking), returns True on success"""
+        try:
+            if self._send_raw_protobuf:
+                # Send raw protobuf serialization (for compatibility with non-RTIX receivers)
+                data = msg.SerializeToString()
+            else:
+                # Send wrapped in RTIX Packet format (standard RTIX behavior)
+                data = packMessage(msg)
+            self._socket.send(data)
+            logging.debug("PushPublisher '{}' sent data".format(self._channel_id))
+            return True
+        except Exception as e:
+            logging.error("PushPublisher '{}' send failed: {}".format(
+                self._channel_id, e))
+        return False
+
+
 class Subscriber:
     """Primary interface for subscribing to messages from a channel"""
 
